@@ -54,10 +54,11 @@ Precompiled dll already available for Windows in `src/main/resources/dll` folder
 https://github.com/t-pankajkumar/OCRAD
 ```
 ### Steps to compile
+* Generate object files of `ocradlib` follow the instructions @ https://github.com/t-pankajkumar/OCRAD/blob/master/INSTALL 
 * Compile jni implimentation
   `g++ -c -fPIC -I"C:/Program Files/Java/jdk1.8.0_102/include" -I"C:/Program Files/Java/jdk1.8.0_102/include/win32" com_ocrad_Main.cc -o com_ocrad_Main.o`
 * Generate dll
-  `g++ -shared -o native.dll com_ocrad_Main.o common.o segment.o mask.o rational.o rectangle.o track.o iso_8859.o ucs.o user_filter.o page_image.o page_image_io.o bitmap.o blob.o profile.o feats.o feats_test0.o feats_test1.o character.o character_r11.o character_r12.o character_r13.o textline.o textline_r2.o textblock.o textpage.o -Wl,--add-stdcall-alias`
-* Move the generated `native.dll` to `src/main/resources/dll`.
+  `g++ -shared -o native.so com_ocrad_Main.o common.o segment.o mask.o rational.o rectangle.o track.o iso_8859.o ucs.o user_filter.o page_image.o page_image_io.o bitmap.o blob.o profile.o feats.o feats_test0.o feats_test1.o character.o character_r11.o character_r12.o character_r13.o textline.o textline_r2.o textblock.o textpage.o -Wl,--add-stdcall-alias`
+* Move the generated `native.so` to `src/main/resources/dll`.
 * Run `Ocrad.java`.
 * BINGO
