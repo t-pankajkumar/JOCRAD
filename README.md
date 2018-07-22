@@ -29,6 +29,7 @@ abcdefghijklmn
 ```
 
 ## Development
+If you just want to compile the library for linux skip this step and go to Compiling step.
 ### Generate header file
 * Add external tools configuration to generate header file.
   ![image](https://user-images.githubusercontent.com/8513424/43042947-3515a9ac-8da6-11e8-8866-b3a20440e164.png)
