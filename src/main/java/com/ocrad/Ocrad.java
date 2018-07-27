@@ -1,4 +1,4 @@
-/*	Java JNI wrapper for GNU OCRAD (https://www.gnu.org/software/ocrad/)
+/*  Java JNI wrapper for GNU OCRAD (https://www.gnu.org/software/ocrad/)
     Copyright (C) 2018  T Pankaj Kumar.
 
     This program is free software: you can redistribute it and/or modify

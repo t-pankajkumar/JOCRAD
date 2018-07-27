@@ -1,4 +1,4 @@
-/*	Java JNI wrapper for GNU OCRAD (https://www.gnu.org/software/ocrad/)
+/*  Java JNI wrapper for GNU OCRAD (https://www.gnu.org/software/ocrad/)
     Copyright (C) 2018  T Pankaj Kumar.
 
     This program is free software: you can redistribute it and/or modify
@@ -26,6 +26,8 @@ public class Main {
 	public native int OCRAD_close(long ocrdes);
 
 	public native int OCRAD_get_errno(long ocrdes);
+	
+	public native int OCRAD_set_image(long ocrdes, Pixmap image, boolean invert);
 
 	public native int OCRAD_set_image_from_file(long ocrdes, String filename, boolean invert);
 
