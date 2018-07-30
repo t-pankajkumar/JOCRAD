@@ -5,6 +5,13 @@ public class Pixmap {
 	private int height;
 	private int width;
 	private int mode;
+	
+	public Pixmap(String data, int height, int width, int mode) {
+		this.data = data;
+		this.height = height;
+		this.width = width;
+		this.mode = mode;
+	}
 
 	public String getData() {
 		return data;

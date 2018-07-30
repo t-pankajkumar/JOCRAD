@@ -17,7 +17,16 @@
 
 package com.ocrad;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
 
 public class Ocrad {
 	static {
@@ -31,23 +40,38 @@ public class Ocrad {
 		Main m = new Main();
 		long ptr = m.OCRAD_open();
 		System.out.println(m.OCRAD_version());
-		m.OCRAD_set_image_from_file(ptr, file.getPath(), false);
-		int errorno = m.OCRAD_get_errno(ptr);
-		m.OCRAD_recognize(ptr, true);
-		// Get blocks
-		if (errorno == 0) {
-			int blocks = m.OCRAD_result_blocks(ptr);
-			int linenum;
-			for (int i = 0; i < blocks; i++) {
-				linenum = m.OCRAD_result_lines(ptr, i);
+		// m.OCRAD_set_image_from_file(ptr, file.getPath(), false);
+		try {
+			BufferedImage image = ImageIO
+					.read(file);
+			int[] data = new int[image.getWidth() * image.getHeight()];
+			int imgarray[] = image.getRGB(0, 0, image.getWidth(), image.getHeight(), data, 0, image.getWidth());
+			
+			Pixmap pixmap = new Pixmap(Arrays.toString(imgarray), 1575, 73, 0);
+			int errorno = m.OCRAD_get_errno(ptr);
+			System.out.println(errorno);
+			int set_img = m.OCRAD_set_image(ptr, pixmap, false);
+			System.out.println(set_img);
+			// Get blocks
+			if (errorno == 0 && set_img == 0) {
+				int rec = m.OCRAD_recognize(ptr, true);
+				int blocks = m.OCRAD_result_blocks(ptr);
+				System.out.println(blocks);
+				int linenum;
+				for (int i = 0; i < blocks; i++) {
+					linenum = m.OCRAD_result_lines(ptr, i);
 
-				for (int j = 0; j < linenum; j++) {
-					System.out.println(m.OCRAD_result_line(ptr, i, j));
+					for (int j = 0; j < linenum; j++) {
+						System.out.println(m.OCRAD_result_line(ptr, i, j));
+					}
 				}
 			}
-		}
 
-		m.OCRAD_close(ptr);
+			m.OCRAD_close(ptr);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

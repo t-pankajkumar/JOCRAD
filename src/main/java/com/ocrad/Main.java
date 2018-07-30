@@ -26,7 +26,7 @@ public class Main {
 	public native int OCRAD_close(long ocrdes);
 
 	public native int OCRAD_get_errno(long ocrdes);
-	
+
 	public native int OCRAD_set_image(long ocrdes, Pixmap image, boolean invert);
 
 	public native int OCRAD_set_image_from_file(long ocrdes, String filename, boolean invert);
