@@ -17,7 +17,10 @@
 
 package com.ocrad;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,19 +38,46 @@ public class Ocrad {
 
 	public static void main(String[] args) {
 		ClassLoader loader = Ocrad.class.getClassLoader();
-		File file = new File(loader.getResource("test.pbm").getFile());
+		File file = new File(loader.getResource("Image.pbm").getFile());
 
 		Main m = new Main();
 		long ptr = m.OCRAD_open();
 		System.out.println(m.OCRAD_version());
 		// m.OCRAD_set_image_from_file(ptr, file.getPath(), false);
 		try {
-			BufferedImage image = ImageIO
-					.read(file);
-			int[] data = new int[image.getWidth() * image.getHeight()];
-			int imgarray[] = image.getRGB(0, 0, image.getWidth(), image.getHeight(), data, 0, image.getWidth());
-			
-			Pixmap pixmap = new Pixmap(Arrays.toString(imgarray), 1575, 73, 0);
+			BufferedImage image = ImageIO.read(file);
+			BufferedImage bi = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
+			Graphics gc = bi.createGraphics();
+			gc.drawImage(image, 0, 0, null);
+			gc.dispose();
+			//ImageIO.write(bi, "png", new File("bin.png"));
+			int[] data = new int[bi.getWidth() * bi.getHeight()];
+			int[] pix = new int[bi.getWidth() * bi.getHeight()];
+			int cnt = 0;
+			int rs = 0;
+			StringBuilder sb = new StringBuilder();
+			for (int y = 0; y < bi.getHeight(); y++) {
+				for (int x = 0; x < bi.getWidth(); x++) {
+					Color color = new Color(bi.getRGB(x, y));
+					int r = color.getRed();
+					int b = color.getBlue();
+					int g = color.getGreen();
+					
+					int bw = (r+g+b) / 3;
+					pix[cnt] = bw;
+					sb.append(bw);
+					if(x/1575 == 0) {
+						rs++;
+					}
+					cnt++;
+				}
+			}
+			System.out.println(rs);
+			byte[] pixels = ((DataBufferByte) bi.getRaster().getDataBuffer()).getData();
+			//System.out.println(sb.toString().substring(0, 1000));
+			int imgarray[] = bi.getRGB(0, 0, bi.getWidth(), bi.getHeight(), data, 0, bi.getWidth());
+			// System.out.println(Arrays.toString(imgarray));
+			Pixmap pixmap = new Pixmap(sb.toString(), 1575, 73, 0);
 			int errorno = m.OCRAD_get_errno(ptr);
 			System.out.println(errorno);
 			int set_img = m.OCRAD_set_image(ptr, pixmap, false);
@@ -56,7 +86,7 @@ public class Ocrad {
 			if (errorno == 0 && set_img == 0) {
 				int rec = m.OCRAD_recognize(ptr, true);
 				int blocks = m.OCRAD_result_blocks(ptr);
-				System.out.println(blocks);
+				System.out.println(rec);
 				int linenum;
 				for (int i = 0; i < blocks; i++) {
 					linenum = m.OCRAD_result_lines(ptr, i);
@@ -68,7 +98,9 @@ public class Ocrad {
 			}
 
 			m.OCRAD_close(ptr);
-		} catch (IOException e) {
+		} catch (
+
+		IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
