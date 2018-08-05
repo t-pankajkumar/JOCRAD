@@ -31,6 +31,8 @@ public class Ocrad {
 		Main m = new Main();
 		long ptr = m.OCRAD_open();
 		System.out.println(m.OCRAD_version());
+		Pixmap pixmap = new Pixmap(new int[]{0,1,3},100,500,0);
+		System.out.println(m.OCRAD_set_image(ptr, pixmap, false));
 		m.OCRAD_set_image_from_file(ptr, file.getPath(), false);
 		int errorno = m.OCRAD_get_errno(ptr);
 		m.OCRAD_recognize(ptr, true);
