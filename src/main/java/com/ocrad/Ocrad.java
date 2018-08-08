@@ -38,7 +38,6 @@ public class Ocrad {
 	public static void main(String[] args) {
 		ClassLoader loader = Ocrad.class.getClassLoader();
 		File file = new File(loader.getResource("test.pbm").getFile());
-
 		try {
 			Main m = new Main();
 			long ptr = m.OCRAD_open();
@@ -113,7 +112,7 @@ public class Ocrad {
 		return bitmap;
 	}
 
-	public static byte[] ppm(BufferedImage image) throws IOException {
+	public static int[] ppm(BufferedImage image) throws IOException {
 		int width = image.getWidth();
 		int height = image.getHeight();
 		int data[] = new int[width * height];
@@ -130,26 +129,15 @@ public class Ocrad {
 
 		int k = 0;
 		int col;
-		byte[] bitmap = new byte[width * height * 3];
-		/*BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Buff.ppm")));
-		StringBuilder sb = new StringBuilder();*/
+		int[] bitmap = new int[width * height * 3];
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				col = data[y * width + x];
-				bitmap[k++] = (byte) model.getRed(col);
-				bitmap[k++] = (byte) model.getGreen(col);
-				bitmap[k++] = (byte) model.getBlue(col);
-				//byte[] b = { (byte) model.getRed(col), (byte)model.getGreen(col), (byte)model.getBlue(col) };
-				//System.out.println( new String(b,"ISO-8859-1") );
-				/*writer.write(new String(b,"ISO-8859-1"));
-				sb.append(new String(b,"ISO-8859-1"));*/
+				bitmap[k++] = (int) model.getRed(col);
+				bitmap[k++] = (int) model.getGreen(col);
+				bitmap[k++] = (int) model.getBlue(col);
 			}
 		}
-		//writer.flush();
-		//writer.close();
-		//System.out.println(sb.toString().length());
-		/*for(int i=0;i<bitmap.length;i++)
-			System.out.println(bitmap[i]);*/
 		return bitmap;
 	}
 
